@@ -1,25 +1,27 @@
 import express from 'express'
+
 export const calc = express.Router()
-/*calc.get('/', (req, res) => {
-    res.send('Welcome to the calculator')
-}) */
-calc.get('/calc/:op/:nb1/:nb2', (req, res) => {
-    let op = req.params.op
-    let nb1 = Number(req.params.nb1)
-    let nb2 = Number(req.params.nb2)
-    let resultat = 0
-    switch (op) {
+calc.get('/:op/:nb1/:nb2', (req, res, next) => {
+    const op = req.params.op
+    // TODO verifier que c'est pas isNan
+    const nb1 = Number(req.params.nb1)
+    const nb2 = Number(req.params.nb2)
+    switch (op.toLowerCase()) {
         case 'add':
-            resultat = nb1 - nb2
-            break;
+            req.message = nb1 + nb2
+            break
         case 'sub':
-            resultat = nb1 - nb2;
-            break;
+            req.message = nb1 - nb2
+            break
         case 'mul':
-            resultat = nb1 * nb2;
-            break;
+            req.message = nb1 * nb2
+            break
         case 'div':
-            resultat = nb1 / nb2;
+            req.message = nb1 / nb2
+            break
+        default:
+            req.message = 'mauvais opérateur ou nombres'
     }
-    res.send(`${resultat}`)
+
+    next()
 })
